@@ -1,0 +1,197 @@
+7th exp 1.Open the Windows Terminal and run the following commands:  
+             mkdir flask-docker-app
+             cd flask-docker-app
+2. Open this folder in VS Code, create a file called app.py, paste the code, and save it.
+3. Create a file called requirements.txt, paste the following text, and save it:  
+             Flask==2.3.2
+4.  Create a file called Dockerfile, paste the code, and save it.
+5.  Now, open the terminal and run the following commands:
+            docker build -t flask-docker-app .
+            docker run -p 5000:5000 flask-docker-app
+6.  Now, go to the browser and visit http://localhost:5000. You will see the output:  
+            Hello, Docker World!  
+app.py
+
+from flask import Flask
+import os
+
+app = Flask(__name__)
+
+@app.route('/')
+def hello():
+    name = os.getenv("NAME", "World")  # Fetch environment variable "NAME"
+    return f"Hello, {name}!"  # Display greeting message
+
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', port=5000)  # Updated to port 5000
+
+
+requirements.txt
+type Flask==2.3.2
+
+
+Dockerfile  
+
+# Use official lightweight Python image
+FROM python:3.9-slim
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy all files from current directory to /app in the container
+COPY . /app
+
+# Install dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Expose port 5000 for the app
+EXPOSE 5000
+
+# Set an environment variable
+ENV NAME World
+
+# Run the app
+CMD ["python", "app.py"]
+
+
+deployment.yaml  
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-python-app-deployment
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-python-app
+  template:
+    metadata:
+      labels:
+        app: my-python-app
+    spec:
+      containers:
+        - name: my-python-app
+          image: my-python-app:latest  # Replace with your actual image name
+          ports:
+            - containerPort: 5000
+
+service.yaml
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-python-app-service
+spec:
+  selector:
+    app: my-python-app
+  ports:
+    - name: http
+      port: 5000
+      targetPort: 5000
+  type: LoadBalancer
+
+
+expt 9:
+automate the process of running containerised applications using kubernetes
+
+steps:
+open terminal type 
+mkdir flask-docker-app
+cd flask-docker-app
+docker login
+run docker build -t my-python-app
+docker tag my-python-app:latest <username>/my-python-app:latest
+docker push <username>/my-python-app:latest
+open vs code and create  files 
+
+open terminal
+
+kubectl apply -f deployment.yaml
+kubectl -f service.yaml
+kubectl get deployments
+kubectl get pods
+kubectl get svc
+kubectl port-forward svc/my-python-app-service 9090:5000
+
+open vs code
+type this:
+docker run -p 5000:5000 my-python-app
+
+output: double click the url you get, you see a webpage opened , with "hello world"
+
+expt 10:
+maven and java
+
+steps:
+got to maven official website, download binary zip archive folder and extract it.
+go to "edit system environment variables" , environment variables, click on new.
+variable name:MAVEN_HOME
+variable value: copy path to extracted folder
+
+now copy bin folder path of this extracted folder.
+click on path, add new and then paste this url there, click ok.
+
+open terminal type 
+mvn -version
+java -version
+
+if you see versions, it is successful.
+
+expt 11:
+karate testing
+steps:
+check for mvn and java version
+run this command in terminal:
+
+mvn archetype:generate ^
+-DarchetypeGroupId=com.intuit.karate ^
+-DarchetypeArtifactId=karate-archetype ^
+-DarchetypeVersion=1.5.0 ^
+-DgroupId=com.example ^
+-DartifactId=karate-demo ^
+-DinteractiveMode=false
+
+
+a folder names karate-demo will be created.
+open that folder in vs code.
+open terminal, type 
+mvn test -Dtest=examples.users.UsersRunner
+
+you get build success at last. 
+in between you laso see a url, double click on that. 
+you get a wepage, this is output.
+
+expt-12:
+Springboot
+check mvn and java version.
+
+go to spring initialzr website and selct project maven, language java, version 3.4.11 snapshot(3.3.3 if available)
+dependencies:Spring Web
+click generate, open this folder in vs code
+in pom.xml make these changes
+1. version to 3.3.3
+2. remove repositories section
+
+Inside src/main/java/com/example/demo, create a new file named HelloController.java and add the following code:
+package com.example.demo;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
+@RestController
+public class HelloController {
+@GetMapping("/")
+public String hello() {
+return "Hello, Spring Boot!";
+}
+}
+
+in vs code terminal, set path as spring-boot\demo.
+
+run this:
+mvn spring-boot:run
+
+you should see springboot running. 
+now open terminal: type
+http:localhost:8080
+
+a webpage gets opened "hello world"-- this is output.
