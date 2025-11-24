@@ -100,8 +100,9 @@ open terminal type
 mkdir flask-docker-app
 cd flask-docker-app
 docker login
-run docker build -t my-python-app
-docker tag my-python-app:latest <username>/my-python-app:latest
+run this: docker build -t my-python-app (in vs code)
+now again in terminal:
+docker tag my-python-app:latest <username>/my-python-app:latest (docker username)
 docker push <username>/my-python-app:latest
 open vs code and create  files 
 
