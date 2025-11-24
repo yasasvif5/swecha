@@ -196,3 +196,7 @@ now open terminal: type
 http:localhost:8080
 
 a webpage gets opened "hello world"-- this is output.
+
+exp 8th:
+kubectl version --client
+kubectl get nodes
