@@ -1,0 +1,376 @@
+SIMPLE DISTANCE
+
+import java.util.*;
+
+public class SimpleDistanceVector {
+    static final int INF = 99;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.print("Enter number of routers: ");
+        int n = sc.nextInt();
+        int[][] dist = new int[n][n];
+
+        // Input cost matrix
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                dist[i][j] = sc.nextInt();
+            }
+        }
+
+        // Distance Vector update (Bellman-Ford style)
+        boolean updated;
+        do {
+            updated = false;
+            for (int i = 0; i < n; i++)
+                for (int j = 0; j < n; j++)
+                    for (int k = 0; k < n; k++)
+                        if (dist[i][j] > dist[i][k] + dist[k][j]) {
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                            updated = true;
+                        }
+        } while (updated);
+
+        // Print final table (NO ROW LABELS)
+        System.out.println("\nDistance Table:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++)
+                System.out.print(dist[i][j] + " ");
+            System.out.println();
+        }
+
+        sc.close();
+    }
+}
+
+CRC
+
+import java.util.*;
+
+class Main {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        System.out.println("=== CRC Error Checker ===");
+        System.out.print("Enter binary data (e.g., 1101011011): ");
+        String data = sc.next();
+
+        System.out.println("\nChoose CRC Type:");
+        System.out.println("1. CRC-12 (x^12 + x^11 + x^3 + x^2 + x + 1)");
+        System.out.println("2. CRC-16 (x^16 + x^12 + x^5 + 1)");
+        System.out.print("Enter your choice (1-2): ");
+        int choice = sc.nextInt();
+
+        String poly;
+
+        // -----------------------------
+        //     SWITCH–CASE FOR CRC
+        // -----------------------------
+        switch (choice) {
+            case 1:
+                poly = "1100000001111"; // CRC-12
+                break;
+
+            case 2:
+                poly = "10001000000100001"; // CRC-16
+                break;
+
+            default:
+                System.out.println("Invalid option.");
+                sc.close();
+                return;
+        }
+
+        String crc = calculateCRC(data, poly);
+        System.out.println("\nCRC bits: " + crc);
+
+        String transmitted = data + crc;
+        System.out.println("Transmitted message: " + transmitted);
+
+        System.out.print("\nEnter received frame: ");
+        String received = sc.next();
+
+        String remainder = calculateCRC(received, poly);
+        System.out.println("Remainder after checking: " + remainder);
+
+        System.out.println(remainder.contains("1")
+                ? "\nError found in received message."
+                : "\nNo error. Received message is correct.");
+
+        sc.close();
+    }
+
+    // -----------------------------
+    //     CRC CALCULATION
+    // -----------------------------
+    static String calculateCRC(String data, String poly) {
+        StringBuilder temp = new StringBuilder(data + "0".repeat(poly.length() - 1));
+
+        for (int i = 0; i <= temp.length() - poly.length(); i++) {
+            if (temp.charAt(i) == '1') {
+                for (int j = 0; j < poly.length(); j++) {
+                    temp.setCharAt(
+                        i + j,
+                        temp.charAt(i + j) == poly.charAt(j) ? '0' : '1'
+                    );
+                }
+            }
+        }
+
+        return temp.substring(temp.length() - poly.length() + 1);
+    }
+}
+
+CHARACTER STUFFING
+
+#include <stdio.h>
+#include <string.h>
+int main() {
+    char data[50], stuffed[100];
+    int i, j = 0;
+
+    printf("Enter data: ");
+    scanf("%s", data);
+
+    // Start FLAG
+    stuffed[j++] = 'F';
+
+    for (i = 0; i < strlen(data); i++) {
+        if (data[i] == 'F' || data[i] == 'E') {  
+            stuffed[j++] = 'E';   // Stuff ESC before FLAG/ESC
+        }
+        stuffed[j++] = data[i];
+    }
+
+    // End FLAG
+    stuffed[j++] = 'F';
+    stuffed[j] = '\0';
+
+    printf("\nAfter Stuffing : %s\n", stuffed);
+
+    return 0;
+}
+
+BIT STUFFING
+
+#include <stdio.h>
+#include <string.h>
+
+int main() {
+    char data[100], stuffed[200];
+    int i, j = 0, count = 0;
+
+    printf("Enter bit stream (0s and 1s): ");
+    scanf("%s", data);
+
+    for (i = 0; i < strlen(data); i++) {
+        if (data[i] == '1') {
+            count++;
+        } else {
+            count = 0;
+        }
+        stuffed[j++] = data[i];
+
+        if (count == 5) {      // After 5 consecutive 1s
+            stuffed[j++] = '0'; // Stuff a 0
+            count = 0;
+        }
+    }
+    stuffed[j] = '\0';
+
+    printf("\nAfter Bit Stuffing: %s\n", stuffed);
+
+    return 0;
+}
+
+GO BACK N
+
+#include<stdio.h>
+int main()
+{
+    int windowsize, totalframes, sent=0, ack, i;
+    printf("Enter total number of frames to be sent: ");
+    scanf("%d", &totalframes);
+    printf("Enter window size: ");
+    scanf("%d", &windowsize);
+    while(sent < totalframes)
+    {
+        for(i = 0; i < windowsize && sent < totalframes; i++)
+        {
+            printf("Frame %d has been transmitted.\n", sent+1);
+            sent++;
+        }
+        printf("\nPlease enter last Acknowledgement received: ");
+        scanf("%d", &ack);
+        if(ack == totalframes)
+        {
+            printf("\nSuccessful\n");
+            break;
+        }
+        else if(ack < sent)
+        {
+            sent = ack;
+            printf("Acknowledgement for Frame %d received. Resending from Frame %d.\n\n", ack, sent+1);
+        }
+    }
+
+    return 0;
+}
+
+subnets/MST
+
+
+
+public class PrimsAlgorithm {
+    static final int INF = 9999;
+    static final int MAX = 20;
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n, total = 0, edges = 0;
+
+        System.out.print("Enter number of nodes: ");
+        n = sc.nextInt();
+
+        int[][] cost = new int[n][n];
+        int[][] mst = new int[n][n];
+        boolean[] visited = new boolean[n];
+
+        System.out.println("Enter adjacency matrix:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                cost[i][j] = sc.nextInt();
+                if (cost[i][j] == 0)
+                    cost[i][j] = INF; // no edge
+                mst[i][j] = 0;
+            }
+        }
+
+        System.out.print("Enter starting vertex (0 to " + (n - 1) + "): ");
+        int start = sc.nextInt();
+
+        Arrays.fill(visited, false);
+        visited[start] = true;
+
+        while (edges < n - 1) {
+            int min = INF, u = -1, v = -1;
+
+            for (int i = 0; i < n; i++) {
+                if (visited[i]) {
+                    for (int j = 0; j < n; j++) {
+                        if (!visited[j] && cost[i][j] < min) {
+                            min = cost[i][j];
+                            u = i;
+                            v = j;
+                        }
+                    }
+                }
+            }
+
+            if (u != -1 && v != -1) {
+                visited[v] = true;
+                mst[u][v] = mst[v][u] = min;
+                total += min;
+                edges++;
+            }
+        }
+
+        System.out.println("\nMST Adjacency Matrix:");
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++)
+                System.out.printf("%4d", mst[i][j]);
+            System.out.println();
+        }
+
+        System.out.println("\nMinimum Cost of Broadcast Tree = " + total);
+        sc.close();
+    }
+}
+
+
+
+
+
+LEAKY BUCKET 
+
+
+
+import java.util.*;
+
+public class LeakyBucket {
+    static final int BUCKET_SIZE = 512;
+
+    static void bktInput(int pktSize, int outRate) {
+        if (pktSize > BUCKET_SIZE) {
+            System.out.println("\n\t\tBucket overflow");
+        } else {
+            while (pktSize > outRate) {
+                System.out.println("\n\t\t" + outRate + " bytes outputted.");
+                pktSize -= outRate;
+            }
+            if (pktSize > 0)
+                System.out.println("\n\t\tLast " + pktSize + " bytes sent");
+            System.out.println("\n\t\tBucket output successful");
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int outRate, pktSize;
+
+        System.out.print("Enter output rate: ");
+        outRate = sc.nextInt();
+
+        for (int i = 1; i <= 5; i++) {
+            System.out.println("\nPacket no " + i);
+            System.out.print("Enter packet size: ");
+            pktSize = sc.nextInt();
+            bktInput(pktSize, outRate);
+        }
+
+        sc.close();
+    }
+}
+
+
+
+DJIKSTRA 
+
+
+
+import java.util.*;
+
+public class Dijkstra {
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int n = sc.nextInt(); // number of vertices
+        int[][] g = new int[n][n];
+        for (int i = 0; i < n; i++)
+            for (int j = 0; j < n; j++)
+                g[i][j] = sc.nextInt();
+        int src = sc.nextInt();
+        int[] dist = new int[n];
+        boolean[] vis = new boolean[n];
+        Arrays.fill(dist, Integer.MAX_VALUE);
+        dist[src] = 0;
+        for (int i = 0; i < n - 1; i++) {
+            int u = -1, min = Integer.MAX_VALUE;
+            for (int v = 0; v < n; v++)
+                if (!vis[v] && dist[v] < min) {
+                    min = dist[v]; u = v;
+                }
+            vis[u] = true;
+            for (int v = 0; v < n; v++)
+                if (g[u][v] != 0 && dist[u] + g[u][v] < dist[v])
+                    dist[v] = dist[u] + g[u][v];
+        }
+        System.out.println("Shortest distances from source:");
+        for (int i = 0; i < n; i++)
+            System.out.println(src + " -> " + i + " = " + dist[i]);
+    }
+}
+
+
+
+NSG2 command: java -jar NSG2.jar
