@@ -1,0 +1,35 @@
+Write a Flutter program to display a greeting message with an AppBar, icon, text, and button using column layout.
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(GreetingApp());
+
+class GreetingApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Greeting App"),
+          backgroundColor: Colors.pinkAccent,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.favorite, color: Colors.pink, size: 60),
+              SizedBox(height: 10),
+              Text("Welcome to Flutter!", style: TextStyle(fontSize: 24)),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Say Hello"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
