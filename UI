@@ -1,0 +1,1135 @@
+do all programs (except those mentioned as flutlab) in dartpad
+1b. Simple program to understand dart basics
+// Simple Dart Program to understand basics
+
+void main() {
+  // Variables
+  String name = "Shiva";
+  int age = 22;
+  double height = 5.9;
+  bool isStudent = true;
+
+  // Printing variables
+  print("Hello, my name is $name.");
+  print("I am $age years old and $height feet tall.");
+  print("Am I a student? $isStudent");
+
+  // Conditional
+  if (age >= 18) {
+    print("I am an adult.");
+  } else {
+    print("I am not an adult.");
+  }
+
+  // Loop
+  print("Counting from 1 to 5:");
+  for (int i = 1; i <= 5; i++) {
+    print(i);
+  }
+
+  // List example
+  List<String> fruits = ["Apple", "Banana", "Mango"];
+  print("My favorite fruits:");
+  for (var fruit in fruits) {
+    print(fruit);
+  }
+}
+
+
+
+2a.  Explore various Flutter widgets (Text, Image, Container, etc.).
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Widgets Example")),
+        body: Column(
+          children: [
+            Text("This is a Text Widget"),
+            Image.network(
+              "https://storage.googleapis.com/cms-storage-bucket/lockup_flutter_horizontal.c823e53b3a1a7b0d36a9.png",
+              height: 100,
+            ),
+            Container(
+              height: 100,
+              width: 100,
+              color: Colors.blue,
+              child: Center(child: Text("Container")),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+2b. Implement different layout structures using Row, Column, and Stack widgets.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Row, Column & Stack")),
+        body: Column(
+          children: [
+            // Row Example
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("A"),
+                SizedBox(width: 10),
+                Text("B"),
+                SizedBox(width: 10),
+                Text("C"),
+              ],
+            ),
+            SizedBox(height: 20),
+
+            // Column Example
+            Column(
+              children: [
+                Text("1"),
+                Text("2"),
+                Text("3"),
+              ],
+            ),
+            SizedBox(height: 20),
+
+            // Stack Example
+            Stack(
+              alignment: Alignment.center,
+              children: [
+                Container(width: 100, height: 100, color: Colors.red),
+                Text("Stack"),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+3a. Design a responsive UI that adapts to different screen sizes.(for changes- change output window size in dartpad)
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: ResponsiveLayout(),
+      debugShowCheckedModeBanner: false,
+    );
+  }
+}
+
+class ResponsiveLayout extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        double width = constraints.maxWidth;
+        String viewType;
+        IconData icon;
+        Color color;
+
+        if (width < 600) {
+          viewType = "Mobile View";
+          icon = Icons.phone_android;
+          color = Colors.blue;
+        } else if (width < 1200) {
+          viewType = "Tablet View";
+          icon = Icons.tablet_mac;
+          color = Colors.green;
+        } else {
+          viewType = "Desktop View";
+          icon = Icons.desktop_windows;
+          color = Colors.deepPurple;
+        }
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text("Responsive UI - $viewType"),
+            backgroundColor: color,
+          ),
+          body: _buildLayout(icon, viewType, color),
+        );
+      },
+    );
+  }
+
+  Widget _buildLayout(IconData icon, String text, Color color) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(icon, size: 100, color: color),
+          SizedBox(height: 20),
+          Text(
+            text,
+            style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: color),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+3b.  Implement media queries and breakpoints for responsiveness.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ResponsiveScreen(),
+    );
+  }
+}
+
+class ResponsiveScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    // Get screen width using MediaQuery
+    double width = MediaQuery.of(context).size.width;
+
+    String viewType;
+    IconData icon;
+    Color color;
+
+    // Define breakpoints
+    if (width < 600) {
+      viewType = "Mobile View";
+      icon = Icons.phone_android;
+      color = Colors.blue;
+    } else if (width < 1200) {
+      viewType = "Tablet View";
+      icon = Icons.tablet_mac;
+      color = Colors.green;
+    } else {
+      viewType = "Desktop View";
+      icon = Icons.desktop_windows;
+      color = Colors.deepPurple;
+    }
+
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Responsive UI - $viewType"),
+        backgroundColor: color,
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 100, color: color),
+            SizedBox(height: 20),
+            Text(
+              viewType,
+              style: TextStyle(
+                fontSize: 28,
+                fontWeight: FontWeight.bold,
+                color: color,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+}
+
+
+
+4a.  Set up navigation between different screens using Navigator.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Simple Navigation Demo',
+      home: HomePage(),
+    );
+  }
+}
+
+// ---------------- First Page ----------------
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home Page')),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Second Page'),
+          onPressed: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => SecondPage()),
+            );
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- Second Page ----------------
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Second Page')),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go Back'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+
+4b.  Implement navigation with named routes.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Named Routes Demo',
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomePage(),
+        '/second': (context) => SecondPage(),
+      },
+    );
+  }
+}
+
+// ---------------- First Page ----------------
+class HomePage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Home Page')),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go to Second Page'),
+          onPressed: () {
+            Navigator.pushNamed(context, '/second');
+          },
+        ),
+      ),
+    );
+  }
+}
+
+// ---------------- Second Page ----------------
+class SecondPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Second Page')),
+      body: Center(
+        child: ElevatedButton(
+          child: Text('Go Back'),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+      ),
+    );
+  }
+}
+
+
+5a.  Design stateful and stateless widgets.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: Scaffold(
+        appBar: AppBar(title: Text("Stateless vs Stateful")),
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MyStatelessWidget(),
+            MyStatefulWidget(),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+// --------- Stateless Widget ----------
+class MyStatelessWidget extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Text("I am Stateless");
+  }
+}
+
+// --------- Stateful Widget ----------
+class MyStatefulWidget extends StatefulWidget {
+  @override
+  _MyStatefulWidgetState createState() => _MyStatefulWidgetState();
+}
+
+class _MyStatefulWidgetState extends State<MyStatefulWidget> {
+  int count = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Text("Count: $count"),
+        ElevatedButton(
+          onPressed: () {
+            setState(() {
+              count++;
+            });
+          },
+          child: Text("Increment"),
+        ),
+      ],
+    );
+  }
+}
+
+
+5b.  Implement state management using set State and Provider.(do only in flutlab.io)
+using Set state
+import 'package:flutter/material.dart';
+
+void main() => runApp(MaterialApp(home: MyHome()));
+
+class MyHome extends StatefulWidget {
+  @override
+  State<MyHome> createState() => _MyHomeState();
+}
+
+class _MyHomeState extends State<MyHome> {
+  int count = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Center(child: Text("Count: $count")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => setState(() => count++),
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+
+using Provider
+
+Steps: 
+add this line in pubspec.yaml dependencies line 
+dependencies:
+  flutter:
+    sdk: flutter
+  provider: ^6.0.5   ---- only this line
+
+at bottom, we have pub commands, click on pub get
+paste below code in main.dart and then build project
+import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+void main() {
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => Counter(),
+      child: MaterialApp(home: MyHome()),
+    ),
+  );
+}
+
+class Counter extends ChangeNotifier {
+  int count = 0;
+  void inc() {
+    count++;
+    notifyListeners();
+  }
+}
+
+class MyHome extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    final counter = Provider.of<Counter>(context); // instead of context.watch
+    return Scaffold(
+      body: Center(child: Text("Count: ${counter.count}")),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => counter.inc(), // instead of context.read
+        child: Icon(Icons.add),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+6a  Create custom widgets for UI elements.
+import 'package:flutter/material.dart';
+void main() => runApp(const MaterialApp(home: MyHome()));
+class MyHome extends StatelessWidget {
+  const MyHome({super.key});
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Custom Widgets")),
+      body: Center(
+        child: Column(
+          children: const [
+            MyCard(title: "Hello!", content: "This is a custom card."),
+            SizedBox(height: 20),
+            MyButton(text: "Click Me"),
+          ],
+        ),
+      ),
+    );
+  }
+}
+class MyCard extends StatelessWidget {
+  final String title, content;
+  const MyCard({super.key, required this.title, required this.content});
+  @override
+  Widget build(BuildContext context) => Card(
+          child: Column(children: [
+            Text(title),
+            Text(content)
+          ]),
+      );
+}
+class MyButton extends StatelessWidget {
+  final String text;
+  const MyButton({super.key, required this.text});
+
+  @override
+  Widget build(BuildContext context) => ElevatedButton(
+        onPressed: () => ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('$text pressed!'))),
+        child: Text(text),
+      );
+}
+
+6b  Apply styling using themes and custom styles
+import 'package:flutter/material.dart';
+void main() => runApp(const MyApp());
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+ 
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      theme: ThemeData(primarySwatch: Colors.teal),
+      home: Scaffold(
+        appBar: AppBar(title: const Text("Themed App")),
+        body: const Center(child: MyHome()),
+      ),
+    );
+  }
+}
+
+class MyHome extends StatelessWidget {
+  const MyHome({super.key});
+ 
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+     
+      children: [
+        const Text("Hello Flutter!", style: TextStyle(fontSize: 20, color: Colors.teal)),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          style: ElevatedButton.styleFrom(backgroundColor: Colors.teal),
+          onPressed: () {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text("Button Clicked!")),
+            );
+          },
+          child: const Text("Click Me"),
+        ),
+      ],
+    );
+  }
+}
+
+
+7a. Design a form with various input fields.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SimpleForm(),
+    );
+  }
+}
+
+class SimpleForm extends StatelessWidget {
+  final TextEditingController nameController = TextEditingController();
+  final TextEditingController phoneController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("User Form")),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Column(
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: InputDecoration(labelText: "Name"),
+            ),
+            TextField(
+              controller: phoneController,
+              decoration: InputDecoration(labelText: "Phone Number"),
+              keyboardType: TextInputType.phone,
+            ),
+            TextField(
+              controller: emailController,
+              decoration: InputDecoration(labelText: "Email ID"),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            TextField(
+              controller: passwordController,
+              decoration: InputDecoration(labelText: "Password"),
+              obscureText: true,
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("Form Submitted")),
+                );
+              },
+              child: Text("Submit"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+b) Implement form validation and error handling.
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: ValidatedForm(),
+    );
+  }
+}
+
+class ValidatedForm extends StatefulWidget {
+  @override
+  _ValidatedFormState createState() => _ValidatedFormState();
+}
+
+class _ValidatedFormState extends State<ValidatedForm> {
+  final _formKey = GlobalKey<FormState>();
+  final nameController = TextEditingController();
+  final phoneController = TextEditingController();
+  final emailController = TextEditingController();
+  final passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text("Form Validation Example")),
+      body: Padding(
+        padding: EdgeInsets.all(16),
+        child: Form(
+          key: _formKey,
+          child: ListView(
+            children: [
+              TextFormField(
+                controller: nameController,
+                decoration: InputDecoration(labelText: "Name"),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your name";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: phoneController,
+                decoration: InputDecoration(labelText: "Phone Number"),
+                keyboardType: TextInputType.phone,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your phone number";
+                  } else if (value.length != 10) {
+                    return "Phone number must be 10 digits";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(labelText: "Email ID"),
+                keyboardType: TextInputType.emailAddress,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your email";
+                  } else if (!value.contains("@")) {
+                    return "Enter a valid email";
+                  }
+                  return null;
+                },
+              ),
+              TextFormField(
+                controller: passwordController,
+                decoration: InputDecoration(labelText: "Password"),
+                obscureText: true,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return "Please enter your password";
+                  } else if (value.length < 6) {
+                    return "Password must be at least 6 characters";
+                  }
+                  return null;
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text("Form Submitted Successfully")),
+                    );
+                  }
+                },
+                child: Text("Submit"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+8a  Add animations to UI elements using Flutter animation framework.
+
+import 'package:flutter/material.dart';
+void main() => runApp(const MaterialApp(home: SimpleAnimation()));
+class SimpleAnimation extends StatefulWidget {
+  const SimpleAnimation({super.key});
+  @override
+  State<SimpleAnimation> createState() => _SimpleAnimationState();
+}
+
+class _SimpleAnimationState extends State<SimpleAnimation> {
+  double size = 100;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text("Simple Animation")),
+      body: Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            AnimatedContainer(
+              width: size,
+              height: size,
+              color: Colors.blue,
+              duration: const Duration(seconds: 1),
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () {
+                setState(() {
+                  size = size == 100 ? 200 : 100;
+                });
+              },
+              child: const Text("Animate"),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+8b Experiment with different types of animations (fade, slide, etc.)
+
+import 'package:flutter/material.dart';
+
+void main() => runApp(MaterialApp(home: SimpleAnim()));
+
+class SimpleAnim extends StatefulWidget {
+  @override
+  State<SimpleAnim> createState() => _SimpleAnimState();
+}
+
+class _SimpleAnimState extends State<SimpleAnim> with TickerProviderStateMixin {
+  late AnimationController fadeCtrl, slideCtrl;
+  bool fade = false, slide = false;
+
+  @override
+  void initState() {
+    super.initState();
+    fadeCtrl = AnimationController(vsync: this, duration: Duration(seconds: 1));
+    slideCtrl = AnimationController(vsync: this, duration: Duration(seconds: 1));
+  }
+
+  @override
+  void dispose() {
+    fadeCtrl.dispose();
+    slideCtrl.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Fade & Slide Animation')),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FadeTransition(
+              opacity: Tween(begin: 1.0, end: 0.0).animate(fadeCtrl),
+              child: SlideTransition(
+                position: Tween(begin: Offset(-1, 0), end: Offset(1, 0))
+                    .animate(slideCtrl),
+                child: Container(width: 100, height: 100, color: Colors.blue),
+              ),
+            ),
+            SizedBox(height: 40),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Fade"),
+                Switch(
+                  value: fade,
+                  onChanged: (v) {
+                    setState(() {
+                      fade = v;
+                      v ? fadeCtrl.forward() : fadeCtrl.reverse();
+                    });
+                  },
+                ),
+                Text("Slide"),
+                Switch(
+                  value: slide,
+                  onChanged: (v) {
+                    setState(() {
+                      slide = v;
+                      v
+                          ? slideCtrl.repeat(reverse: true)
+                          : slideCtrl.stop();
+                    });
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+9a fetch data from a rest api 
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+void main() async {
+// API endpoint for users
+final url = Uri.https(
+'jsonplaceholder.typicode.com',
+'/users',
+);
+try {
+final response = await http.get(url);
+if (response.statusCode == 200) {
+final List<dynamic> jsonData = jsonDecode(response.body);
+for (var user in jsonData) {
+final id = user['id'];
+final name = user['name'];
+final phone = user['phone'];
+print('ID: $id, Name: $name, Contact: $phone');
+}
+} else {
+print('Request failed with code: ${response.statusCode}.');
+}
+} catch (e) {
+print('Error: $e');
+}
+}
+
+
+9b Display the fetched data in a meaningful way in the UI.
+import 'dart:convert' as convert;
+import 'package:http/http.dart' as http;
+
+void main() async {
+  final url = Uri.https('jsonplaceholder.typicode.com', '/users');
+  final response = await http.get(url);
+
+  if (response.statusCode == 200) {
+    // Decode JSON response
+    final List users = convert.jsonDecode(response.body);
+    print('===== Users List =====\n');
+
+    // Loop through users and print details
+    for (var user in users) {
+      final id = user['id'];
+      final name = user['name'];
+      final phone = user['phone'];
+      print('ID: $id');
+      print('Name: $name');
+      print('Contact: $phone');
+      print('--------------------');
+    }
+  } else {
+    print('Request failed with code: ${response.statusCode}.');
+  }
+}
+
+10a Write unit tests for UI components.(do only in flutlab.io)
+Steps: 
+in flutlab, inside test folder, create file called custom_button_test.dart . paste this code there and at bottom, there is Tests. click that and click "run tests", u will get test successful. we dont write anything in main.dart.It can be default code given 
+
+import 'package:flutter/material.dart';
+import 'package:flutter_test/flutter_test.dart';
+
+/// CustomButton widget definition
+class CustomButton extends StatelessWidget {
+  final String label;
+  final VoidCallback onPressed;
+  final bool disabled;
+
+  const CustomButton({
+    Key? key,
+    required this.label,
+    required this.onPressed,
+    this.disabled = false,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton(
+      onPressed: disabled ? null : onPressed,
+      child: Text(label),
+    );
+  }
+}
+
+void main() {
+  testWidgets('renders button with label', (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CustomButton(label: 'Click Me', onPressed: () {}),
+        ),
+      ),
+    );
+
+    expect(find.text('Click Me'), findsOneWidget);
+    expect(find.byType(ElevatedButton), findsOneWidget);
+  });
+
+  testWidgets('calls onPressed when tapped', (WidgetTester tester) async {
+    var tapped = false;
+
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CustomButton(
+            label: 'Tap',
+            onPressed: () {
+              tapped = true;
+            },
+          ),
+        ),
+      ),
+    );
+
+    await tester.tap(find.byType(ElevatedButton));
+    expect(tapped, isTrue);
+  });
+
+  testWidgets('disables button when disabled is true',
+      (WidgetTester tester) async {
+    await tester.pumpWidget(
+      MaterialApp(
+        home: Scaffold(
+          body: CustomButton(
+            label: 'Disabled',
+            onPressed: () {},
+            disabled: true,
+          ),
+        ),
+      ),
+    );
+
+    final button = tester.widget<ElevatedButton>(find.byType(ElevatedButton));
+    expect(button.onPressed, isNull);
+  });
+}
+
+
+
+
+
+10b Use Flutter debugging tools to identify and fix issues.
+import 'package:flutter/material.dart';
+
+void main() => runApp(const MyApp());
+
+class MyApp extends StatelessWidget {
+  const MyApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const MaterialApp(
+      home: MyHomePage(),
+    );
+  }
+}
+
+class MyHomePage extends StatefulWidget {
+  const MyHomePage({super.key});
+
+  @override
+  State<MyHomePage> createState() => _MyHomePageState();
+}
+
+class _MyHomePageState extends State<MyHomePage> {
+  int _counter = 0;
+
+  void _changeCounter() {
+    setState(() {
+      _counter++; // Place breakpoint here
+      print("Counter value: $_counter"); // Also see output in console
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Debug Example')),
+      body: Center(
+        child: Text(
+          'Count: $_counter',
+          style: const TextStyle(fontSize: 24),
+        ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _changeCounter,
+        child: const Icon(Icons.add), // changed from remove → add
+      ),
+    );
+  }
+}
+
+
+
+Extra program
+
+Write a Flutter program to display a greeting message with an AppBar, icon, text, and button using column layout.
+
+import 'package:flutter/material.dart';
+void main() => runApp(GreetingApp());
+
+class GreetingApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: Scaffold(
+        appBar: AppBar(
+          title: Text("Greeting App"),
+          backgroundColor: Colors.pinkAccent,
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.favorite, color: Colors.pink, size: 60),
+              SizedBox(height: 10),
+              Text("Welcome to Flutter!", style: TextStyle(fontSize: 24)),
+              SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {},
+                child: Text("Say Hello"),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
