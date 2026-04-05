@@ -1,0 +1,138 @@
+5. a. Write a Python program to find out the correlation between Salary (dependent variable)
+and Experience (independent variable) using Simple Linear Regression.
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+data = {'Experience': [1,2,3,4,5], 'Salary': [30000,40000,50500,60000,70000]}
+df = pd.DataFrame(data)
+X = df[['Experience']]
+y = df['Salary']
+model = LinearRegression()
+model.fit(X, y)
+predicted_salary = model.predict([[6]])
+print("Coefficient:", model.coef_)
+print("Intercept:", model.intercept_)
+print("Predicted Salary for 6 years experience:", predicted_salary[0])
+
+
+b. Using scikit-learn, perform House Price Prediction with Multiple Linear Regression
+(minihomeprices.csv)
+import pandas as pd
+from sklearn.linear_model import LinearRegression
+df = pd.read_csv("minihomeprices.csv")
+df['bedrooms'] = df['bedrooms'].fillna(df['bedrooms'].median())
+X = df[['area', 'bedrooms', 'age']]
+y = df['price']
+model = LinearRegression()
+model.fit(X, y)
+print("Predicted price:", model.predict([[2500, 3, 10]]))
+print("Model Score:", model.score(X, y))
+
+6 . Write a program to Predict Humidity using Decision Tree Algorithm. (daily_weather.csv)
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeRegressor
+from sklearn.metrics import r2_score
+df = pd.read_csv("daily_weather.csv")
+X = df.drop('relative_humidity_9am', axis=1)
+y = df['relative_humidity_9am']
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+model = DecisionTreeRegressor()
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print("Predicted:", y_pred[:5])
+print("R2 Score:", r2_score(y_test, y_pred))
+
+7.Write a program to implement k-Nearest Neighbour classification algorithm using iris dataset.
+
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import confusion_matrix, accuracy_score
+data = load_iris()
+X = data.data
+y = data.target
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+model = KNeighborsClassifier(n_neighbors=3)
+model.fit(X_train, y_train)
+y_pred = model.predict(X_test)
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+8.Write a program to predict rainfall using Logistic Regression. (weatherAUS.csv)
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import confusion_matrix, accuracy_score
+
+df = pd.read_csv("weatherAUS.csv")
+df = df.dropna()
+
+df['RainTomorrow'] = df['RainTomorrow'].map({'No': 0, 'Yes': 1})
+
+X = df.select_dtypes(include=['float64', 'int64'])
+y = df['RainTomorrow']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
+
+model = LogisticRegression()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+
+print("Confusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+9.Write a program to implement K-Means algorithm for clustering Mallcustomers (Mallcustomers.csv)
+
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.model_selection import train_test_split
+df = pd.read_csv("mallcustomers.csv")
+
+# Features
+X = df[['Income', 'SpendingScore']]
+
+X_train, X_test = train_test_split(X, test_size=0.3, random_state=42)
+kmeans = KMeans(n_clusters=3)
+df['Cluster'] = kmeans.fit_predict(X)
+print(df[['Income', 'SpendingScore', 'Cluster']].head(200))
+
+10.Build a Multi-Layer Perceptron (MLP) neural network model for Regression using Keras
+(minihomeprices.csv / housing.csv)
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+
+df = pd.read_csv("housing.csv")
+
+df = df.dropna()
+df = df.select_dtypes(include=['int64', 'float64'])
+
+X = df.drop('Price', axis=1)
+y = df['Price']
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
+
+# Build model
+model = Sequential()
+model.add(Dense(10, activation='relu', input_shape=(X_train.shape[1],)))
+model.add(Dense(1))
+
+# Compile
+model.compile(optimizer='adam', loss='mse')
+
+# Train
+model.fit(X_train, y_train, epochs=10)
+
+# Predict
+predictions = model.predict(X_test)
+
+
+# Output
+print("Predicted values:", predictions[:5])
+mse = model.evaluate(X_test, y_test)
+print("Mean Squared Error (MSE):", mse)
