@@ -1,0 +1,325 @@
+▶️ Steps: (for 8,9,10)
+Open VS Code
+Create a folder (e.g., angular-apps)
+Create index.html (and employees.json for Q10)
+Paste your code
+run live server or type url in browser.
+
+8. Develop an angular JS form to apply CSS and Events.
+
+Code: index.html
+
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<style>
+form{display:flex;flex-direction:column;align-items:center; gap:6px;}
+</style>
+</head>
+<body ng-controller="ctrl">
+
+<form>
+<input ng-model="name" placeholder="Name" ng-focus="f=1" ng-blur="f=0" ng-class="{'highlight':f}">
+<br>
+<input ng-model="email" placeholder="Email">
+<br>
+<button ng-click="msg='Form Submitted by '+name">Submit</button>
+</form>
+
+<p>{{msg}}</p>
+
+<script>
+angular.module("app",[]).controller("ctrl", function($scope){});
+</script>
+
+</body>
+</html>
+
+9. Develop a Job Registration form and validate it using angular JS.
+
+Code : index.html
+
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<style>
+form{display:flex;flex-direction:column;align-items:center; gap: 10px;}
+</style>
+</head>
+<body ng-controller="ctrl">
+
+<form ng-submit="submit()">
+<input type="text" ng-model="name" placeholder="Name" required>
+<input type="email" ng-model="email" placeholder="Email" required>
+<select ng-model="position" required>
+<option value="" disabled selected>Select Position</option>
+<option>Developer</option>
+<option>Designer</option>
+<option>Tester</option>
+</select>
+<button type="submit">Register</button>
+</form>
+
+<p>{{msg}}</p>
+
+<script>
+angular.module("app",[]).controller("ctrl",function($scope){
+$scope.submit=function(){
+$scope.msg="Job Registered for "+$scope.name+" as "+$scope.position;
+};
+});
+</script>
+
+</body>
+</html>
+
+10. Write an angular JS application to access JSON file data of an employee from a server
+using $http service.
+
+Code:
+1.Employees.json
+
+[
+  {"id":1, "name":"Hansini", "role":"Developer"},
+  {"id":2, "name":"Adifa", "role":"Designer"},
+  {"id":3, "name":"Yasasvi", "role":"Tester"}
+]
+
+2.index.html
+
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<style>
+table{margin:30px auto;border:1px solid #000;border-collapse:collapse;font-family:sans-serif;}
+th,td{border:1px solid #000;padding:5px;text-align:center;}
+</style>
+</head>
+<body ng-controller="ctrl">
+
+<h2 style="text-align:center;">Employee List</h2>
+<table>
+<tr><th>ID</th><th>Name</th><th>Role</th></tr>
+<tr ng-repeat="emp in employees">
+<td>{{emp.id}}</td>
+<td>{{emp.name}}</td>
+<td>{{emp.role}}</td>
+</tr>
+</table>
+
+<script>
+angular.module("app", [])
+.controller("ctrl", function($scope, $http) {
+  $http.get("employees.json").then(function(response) {
+    $scope.employees = response.data;
+  });
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+11.Develop a web application to manage student information using Express and Angular
+JS
+
+first run below commands:
+npm init -y
+npm install express
+then package.json gets generated
+then create 2 files index.html, server.js , paste the codes and type below command:
+node server.js
+check output in browser
+
+Code:
+Server.js
+
+const express = require("express");
+const app = express();
+
+app.use(express.json());
+app.use(express.static("public")); // serve frontend files
+
+let students = [
+  { id: 1, name: "Hansini", course: "CSE" },
+  { id: 2, name: "Adifa", course: "ECE" }
+];
+
+app.get("/students", (req, res) => {
+  res.json(students);
+});
+
+app.post("/students", (req, res) => {
+  let s = req.body;
+  s.id = students.length + 1;
+  students.push(s);
+  res.json({ message: "Added" });
+});
+
+app.listen(3000);
+
+index.html
+<!DOCTYPE html>
+<html ng-app>
+<head>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+<style>
+body{text-align:center;margin-top:30px;font-family:sans-serif;}
+input,button{margin:5px;padding:5px;}
+table{margin:20px auto;border-collapse:collapse;}
+th,td{border:1px solid #000;padding:5px;}
+</style>
+</head>
+<body>
+
+<h2>Student List</h2>
+<table>
+<tr><th>ID</th><th>Name</th><th>Course</th></tr>
+<tr ng-repeat="s in students">
+<td>{{$index + 1}}</td>
+<td>{{s.name}}</td>
+<td>{{s.course}}</td>
+</tr>
+</table>
+
+<h3>Add Student</h3>
+<input ng-model="newName" placeholder="Name">
+<input ng-model="newCourse" placeholder="Course">
+<button ng-click="students = (students || []).concat({name:newName, course:newCourse}); newName=''; newCourse=''">Add</button>
+
+</body>
+</html>
+
+-----------------------------------------------
+For any react application first check 
+npm -v
+node -v
+if versions are displayed then,
+npx create-react-app demo
+cd demo
+ paste codes in App.js
+then run 
+npm start
+check output in browser
+------------------------------------------------
+12. Write a program to create a voting application using React JS
+
+Code : App.js
+
+import React, { useState } from "react";
+
+function App() {
+  const [hansini, setHansini] = useState(0);
+  const [yasasvi, setYasasvi] = useState(0);
+  const [adifa, setAdifa] = useState(0);
+
+  const maxVotes = Math.max(hansini, yasasvi, adifa);
+  let winner = maxVotes === 0 ? "No votes yet" :
+               maxVotes === hansini ? "Hansini" :
+               maxVotes === yasasvi ? "Yasasvi" : "Adifa";
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h1>Simple Counter App</h1>
+      <h2>Winner: {winner} ({maxVotes})</h2>
+
+      <h3>Hansini Votes: {hansini}</h3>
+      <button onClick={() => setHansini(hansini + 1)}>Vote Hansini</button>
+
+      <h3>Yasasvi Votes: {yasasvi}</h3>
+      <button onClick={() => setYasasvi(yasasvi + 1)}>Vote Yasasvi</button>
+
+      <h3>Adifa Votes: {adifa}</h3>
+      <button onClick={() => setAdifa(adifa + 1)}>Vote Adifa</button>
+    </div>
+  );
+}
+
+export default App;
+
+13. Develop a leave management system for an organization where users can apply different types of
+leaves such as casual leave and medical leave. They also can view the available number of days
+using react application.
+
+Code : App.js
+
+import React, { useState } from "react";
+
+function App() {
+  const [casualLeave, setCasualLeave] = useState(10);
+  const [medicalLeave, setMedicalLeave] = useState(8);
+  const [clDays, setClDays] = useState("");
+  const [mlDays, setMlDays] = useState("");
+
+  const applyCL = () => clDays>0 && clDays<=casualLeave ? (setCasualLeave(casualLeave-clDays), setClDays("")) : alert("Invalid CL");
+  const applyML = () => mlDays>0 && mlDays<=medicalLeave ? (setMedicalLeave(medicalLeave-mlDays), setMlDays("")) : alert("Invalid ML");
+  const resetLeaves = () => (setCasualLeave(10), setMedicalLeave(8));
+
+  return (
+    <div style={{textAlign:"center", marginTop:50}}>
+      <h1>Leave Management</h1>
+      <h2>Casual Leave: {casualLeave}</h2>
+      <input type="number" value={clDays} onChange={e=>setClDays(Number(e.target.value))}/>
+      <button onClick={applyCL}>Apply CL</button>
+
+      <h2>Medical Leave: {medicalLeave}</h2>
+      <input type="number" value={mlDays} onChange={e=>setMlDays(Number(e.target.value))}/>
+      <button onClick={applyML}>Apply ML</button>
+
+      <br/><br/>
+      <button onClick={resetLeaves}>Reset</button>
+    </div>
+  );
+}
+
+export default App;
+
+14.Write a program to create a simple calculator Application using React JS.
+
+Code : App.js
+
+import React, { useState } from "react";
+
+function App() {
+  const [input, setInput] = useState("");
+
+  const handleClick = (val) => setInput(input + val);
+  const calculate = () => setInput(eval(input).toString());
+  const clear = () => setInput("");
+
+  return (
+    <div style={{ textAlign: "center", marginTop: 30 }}>
+      <h1>Calculator</h1>
+      <input type="text" value={input} readOnly />
+      <br /><br />
+      <button onClick={() => handleClick("7")}>7</button>
+      <button onClick={() => handleClick("8")}>8</button>
+      <button onClick={() => handleClick("9")}>9</button>
+      <button onClick={() => handleClick("/")}>/</button>
+      <br />
+      <button onClick={() => handleClick("4")}>4</button>
+      <button onClick={() => handleClick("5")}>5</button>
+      <button onClick={() => handleClick("6")}>6</button>
+      <button onClick={() => handleClick("*")}>*</button>
+      <br />
+      <button onClick={() => handleClick("1")}>1</button>
+      <button onClick={() => handleClick("2")}>2</button>
+      <button onClick={() => handleClick("3")}>3</button>
+      <button onClick={() => handleClick("-")}>-</button>
+      <br />
+      <button onClick={() => handleClick("0")}>0</button>
+      <button onClick={() => handleClick(".")}>.</button>
+      <button onClick={calculate}>=</button>
+      <button onClick={() => handleClick("+")}>+</button>
+      <br /><br />
+      <button onClick={clear}>C</button>
+    </div>
+  );
+}
+
+export default App;
