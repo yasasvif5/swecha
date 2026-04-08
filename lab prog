@@ -195,6 +195,63 @@ th,td{border:1px solid #000;padding:5px;}
 </body>
 </html>
 
+
+
+
+manya 
+index.js
+<!DOCTYPE html>
+<html ng-app="myApp">
+
+<body ng-controller="myCtrl">
+
+<h2>Student List</h2>
+
+<button ng-click="load()">Load Students</button>
+
+<ul>
+  <li ng-repeat="s in students">
+    {{s.name}} - {{s.age}}
+  </li>
+</ul>
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.8.2/angular.min.js"></script>
+
+<script>
+angular.module("myApp", [])
+.controller("myCtrl", function($scope, $http){
+
+  $scope.load = function(){
+    $http.get("http://localhost:3000/students")
+    .then(function(res){
+      $scope.students = res.data;
+    });
+  };
+
+});
+</script>
+
+</body>
+</html>
+
+server.js
+
+const express = require("express");
+const cors = require("cors");
+
+const app = express();
+app.use(cors()); // IMPORTANT
+
+app.get("/students", (req, res) => {
+  res.json([
+    { name: "Ram", age: 20 },
+    { name: "Sita", age: 21 }
+  ]);
+});
+
+app.listen(3000);
+
+
 -----------------------------------------------
 For any react application first check 
 npm -v
