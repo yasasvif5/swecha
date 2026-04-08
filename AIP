@@ -1,0 +1,148 @@
+7. Water Jug Problem
+from collections import deque
+
+def water_jug(x, y, target):
+    visited = set()
+    q = deque([(0, 0)])
+
+    while q:
+        a, b = q.popleft()
+
+        if (a, b) in visited:
+            continue
+        visited.add((a, b))
+
+        print(a, b)
+
+        if a == target or b == target:
+            return
+
+        q.append((x, b))      # fill jug1
+        q.append((a, y))      # fill jug2
+        q.append((0, b))      # empty jug1
+        q.append((a, 0))      # empty jug2
+
+        # pour jug1 -> jug2
+        transfer = min(a, y - b)
+        q.append((a - transfer, b + transfer))
+
+        # pour jug2 -> jug1
+        transfer = min(b, x - a)
+        q.append((a + transfer, b - transfer))
+
+water_jug(4, 3, 2)
+
+--------------------------------------------------------------------------------------
+8. travelling salesman
+from itertools import permutations
+
+graph = [
+    [0, 10, 15, 20],
+    [10, 0, 35, 25],
+    [15, 35, 0, 30],
+    [20, 25, 30, 0]
+]
+
+n = len(graph)
+cities = list(range(n))
+
+min_path = float('inf')
+
+for perm in permutations(cities[1:]):
+    cost = 0
+    k = 0
+    for j in perm:
+        cost += graph[k][j]
+        k = j
+    cost += graph[k][0]
+
+    min_path = min(min_path, cost)
+
+print("Minimum cost:", min_path)
+
+
+
+-------------------------------------------------------------
+9. tower of hanoi
+def hanoi(n, source, dest, aux):
+    if n == 1:
+        print(source, "->", dest)
+        return
+    hanoi(n-1, source, aux, dest)
+    print(source, "->", dest)
+    hanoi(n-1, aux, dest, source)
+
+hanoi(3, 'A', 'C', 'B')
+
+
+-----------------------------------------------------------------
+10.monkey banana problem
+def monkey():
+    pos = "door"
+    box = "window"
+    banana = "middle"
+
+    if pos != box:
+        print("Monkey moves to box")
+        pos = box
+
+    print("Monkey pushes box to middle")
+    pos = banana
+
+    print("Monkey climbs box")
+    print("Monkey takes banana")
+
+monkey()
+
+----------------------------------------------------------------------
+11.alpha beta pruning
+def alphabeta(depth, node, maximizing, values, alpha, beta):
+    if depth == 2:
+        return values[node]
+
+    if maximizing:
+        best = -999
+        for i in range(2):
+            val = alphabeta(depth+1, node*2+i, False, values, alpha, beta)
+            best = max(best, val)
+            alpha = max(alpha, best)
+            if beta <= alpha:
+                break
+        return best
+    else:
+        best = 999
+        for i in range(2):
+            val = alphabeta(depth+1, node*2+i, True, values, alpha, beta)
+            best = min(best, val)
+            beta = min(beta, best)
+            if beta <= alpha:
+                break
+        return best
+
+values = [3, 5, 6, 9]
+print("Result:", alphabeta(0, 0, True, values, -999, 999))
+-------------------------------------------------------------------------------------
+12. N-queens
+
+N = 8
+
+def safe(board, row, col):
+    for i in range(row):
+        if board[i] == col or abs(board[i] - col) == abs(i - row):
+            return False
+    return True
+
+def solve(board, row):
+    if row == N:
+        print(board)
+        return True
+
+    for col in range(N):
+        if safe(board, row, col):
+            board[row] = col
+            if solve(board, row + 1):
+                return True
+    return False
+
+board = [-1] * N
+solve(board, 0)
